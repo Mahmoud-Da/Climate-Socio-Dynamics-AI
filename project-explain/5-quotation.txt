@@ -1,0 +1,120 @@
+### **1. Data & Sources**
+**Q: "Where did you get your data from, and how much data do you have?"**
+> **A:** "We used historical weather data (Temperature) from the **Japan Meteorological Agency (JMA)**
+and socioeconomic data (GDP, CO2) from the **World Bank**. We covered a period of **50 years (1974–2024)**, which gives us about 600 monthly data points to train the model."
+
+### **2. Data Cleaning**
+**Q: "Did you have any missing values in the data? How did you handle them?"**
+> **A:** "Yes, real-world data often has gaps. We used **Interpolation** (specifically linear or cubic) to fill in small missing gaps.
+This draws a line between the known points so the AI doesn't crash on empty cells."
+
+### **3. Train vs. Test**
+**Q: "You mentioned 'Hidden Data' or 'Backtesting.' Why did you hide the last 10 years from the AI?"**
+> **A:** "We wanted to simulate a real-world scenario. If we showed the AI the data from 2024, it would just memorize it (cheat).
+By hiding 2014–2024, we could test if the model actually *learned* the patterns or just memorized the answers."
+
+### **4. Accuracy Metric**
+**Q: "How do you know if the model is 'good'? What number tells you that?"**
+> **A:** "We use **RMSE (Root Mean Squared Error)**. In simple terms, it tells us: *'On average, how many degrees off is our prediction?'*
+If the RMSE is 0.5°C, it means our prediction is usually within half a degree of the real temperature."
+
+### **5. The "Seasonality"**
+**Q: "The graph goes up and down every year like a wave. Did you hard-code that?"**
+> **A:** "No, the AI learned that entirely on its own! Because we fed it sequential data (Jan, Feb, Mar...),
+the LSTM network recognized the pattern that 'Temperature rises in Summer and drops in Winter' without us writing a single `if/else` statement."
+
+### **6. Tech Stack**
+**Q: "What tools and libraries did you use to build this?"**
+> **A:** "We used **Python** as the main language. For data handling, we used **Pandas**.
+For the AI model, we used **PyTorch** (specifically LSTM layers). And for the interactive dashboard, we used **Streamlit**."
+
+### **7. Normalization**
+**Q: "Why did you scale the data between 0 and 1?"**
+> **A:** "Because GDP is in the trillions and Temperature is around 15. Neural Networks struggle when inputs have vastly different ranges.
+Scaling them to 0–1 puts everything on a level playing field so the AI treats them equally."
+
+### **8. Scalability**
+**Q: "Could we use this same model to predict Rainfall instead of Temperature?"**
+> **A:** "Absolutely. The architecture is agnostic (it doesn't care what the data is).
+We would just need to swap the 'Temperature' column with 'Precipitation' data, re-train the model, and it would learn the patterns of rainfall instead."
+
+### **9. Challenges**
+**Q: "What was the hardest part of this project?"**
+> **A:** "The hardest part was **Phase 1: Data Alignment**. Combining 'Yearly' GDP data with 'Monthly' Weather data was tricky.
+We had to carefully upsample the yearly data to make sure it matched the monthly frequency without introducing errors."
+
+### **10. Future Work**
+**Q: "If you had more time, what would you add to this project?"**
+> **A:** "I would add more **external variables**, like Solar Activity or Ocean Temperatures (El Niño),
+because those also affect the climate. I would also try to get daily data instead of monthly data to make the predictions even more precise."
+
+
+
+
+**Top 5 "Killer" Questions**.
+
+---
+
+### **Q1: "Why did you choose an LSTM (Deep Learning) for this? 50 years of data is very small. Why not use a standard statistical model like ARIMA or Linear Regression?"**
+
+**The Trap:** They are testing if you just used a "buzzword" (AI) without needing it. Deep Learning usually needs millions of data points, not just 600 months.
+
+**The Best Answer:**
+> "That is a great observation. While ARIMA is excellent for univariate (single variable) linear trends, it struggles with **multivariate non-linear dependencies**.
+>
+> Climate dynamics are not linear—a 10% increase in CO2 does not strictly equal a 10% increase in temperature due to feedback loops. An LSTM (Long Short-Term Memory) network was chosen 
+because it creates an internal state (memory) that can capture these complex, non-linear interactions between Socioeconomic factors (GDP/CO2) and Temperature over long time lags, which a simple regression model would miss."
+
+---
+
+### **Q2: "In Phase 3, you feed the model's own predictions back into itself to simulate 50 years. Doesn't the error compound (explode) over time?"**
+
+**The Trap:** This is the #1 weakness of "Autoregressive" models. If the model is wrong by 1% in Year 1, and you feed that wrong number back in, by Year 50 it might be wrong by 500%.
+
+**The Best Answer:**
+> "Yes, error accumulation is an inherent risk in autoregressive forecasting. We mitigate this in two ways:
+>
+> 1.  **Trend Focus:** We are not claiming the temperature in 2074 will be *exactly* 18.2°C. We are analyzing the **delta (difference)** between the scenarios.
+Even if the absolute value drifts, the *relative difference* between the 'Green Scenario' and the 'High Emissions Scenario' remains statistically valid.
+> 2.  **Short Look-Back Window:** We used a short sequence length (12 months). This allows the model to reset its context frequently based on the strong seasonal signal,
+preventing the model from drifting off into infinity purely based on noise."
+
+---
+
+### **Q3: "You are using GDP and CO2 to predict Temperature. How do you know the model isn't just memorizing that 'Time goes forward and Temperature goes up'? Did you validate causality?"**
+
+**The Trap:** They are asking about **Spurious Correlation**. Just because two lines go up doesn't mean one causes the other.
+
+**The Best Answer:**
+> "We addressed this in Phase 1 before any modeling began. We ran a **Granger Causality Test**.
+>
+> We looked at the time-series data and calculated p-values to see if past values of CO2 provided statistically significant information about future values of Temperature.
+The test passed with a p-value < 0.05, confirming that the relationship is predictive and not just coincidental. Only after this validation did we include those features in the LSTM."
+
+---
+
+### **Q4: "How did you handle the frequency mismatch? GDP is yearly, but Temperature is monthly."**
+
+**The Trap:** This tests your Data Engineering skills. If you just copy-pasted the yearly number 12 times,
+you introduced "step functions" (jagged edges) that confuse the Gradient Descent in the AI.
+
+**The Best Answer:**
+> "We avoided simple forward-filling because it creates artificial 'steps' in the data that are hard for a Neural Network to learn.
+>
+> Instead, we used **Cubic Interpolation** during the resampling process. This draws a smooth curve between
+the yearly data points to approximate the monthly movement of GDP and CO2. This preserves the gradient (the rate of change), which helps the LSTM learn the trend dynamics much more effectively."
+
+---
+
+### **Q5: "In your simulation scenarios (Green vs. Accelerated), you hard-coded the future CO2 values. Isn't that bias?"**
+
+**The Trap:** They are asking if you rigged the game.
+
+**The Best Answer:**
+> "It is not bias; it is **Scenario Analysis**. The model is predicting the *Climate's reaction*, not the *Human Policy*.
+>
+> The AI’s job is: *'Given X amount of CO2, what is the Temperature?'*
+> My job as the engineer is to ask: *'What if humanity produces X amount?'*
+>
+> We hard-code the inputs (the Independent Variables) to test the model's sensitivity.
+This allows stakeholders to see the direct consequence of different policy decisions, which is the ultimate goal of the dashboard."

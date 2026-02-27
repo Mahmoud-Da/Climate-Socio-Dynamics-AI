@@ -1,0 +1,112 @@
+================================================================================
+   CLIMATE-SOCIO DYNAMICS AI - INSTALLATION & USER GUIDE (MAC OS)
+================================================================================
+
+1. PROJECT FOLDER STRUCTURE
+--------------------------------------------------------------------------------
+Ensure your folder looks exactly like this before starting:
+
+Climate-Socio-Dynamics-AI/
+├── data/
+│   ├── processed/           # (Will be created automatically)
+│   └── raw/                 # (Place original CSVs here if you have them)
+├── models/                  # (Where the AI brain is saved)
+├── reports/
+│   └── figures/             # (Where graphs are saved)
+├── src/
+│   ├── phase1_pipeline.py   # Data Processing & Stats
+│   ├── phase2_model.py      # AI Training
+│   └── phase3_dashboard.py  # Interactive Website
+├── project-explain/         # (Text files explaining the logic)
+├── Pipfile                  # (Dependency list)
+├── Pipfile.lock             # (Exact versions)
+└── INSTALL_AND_RUN.txt      # (This file)
+
+
+================================================================================
+   STEP 1: SYSTEM SETUP (DO THIS ONCE)
+================================================================================
+Since you are on a Mac and have nothing installed, follow these 3 steps exactly.
+Open your "Terminal" app (Command + Space, type "Terminal").
+
+1. Install Homebrew (The Mac App Store for coders):
+   Copy and paste this command and hit Enter:
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   (You might need to type your Mac password).
+
+2. Install Python 3.11 (The programming language):
+   Run this command:
+   brew install python@3.11
+
+3. Install Pipenv (The tool that manages project libraries):
+   Run this command:
+   brew install pipenv
+
+
+================================================================================
+   STEP 2: PROJECT SETUP
+================================================================================
+Now we tell the computer to download the specific libraries (PyTorch, Pandas, Streamlit)
+needed for this project.
+
+1. Navigate to the project folder:
+   (Type 'cd' then drag the folder into the terminal window)
+   cd path/to/Climate-Socio-Dynamics-AI
+
+2. Install Dependencies:
+   Run this command and wait for it to finish (it might take 2-3 minutes):
+   pipenv install
+
+   *Note: If it asks to create a virtual environment, say Yes.*
+
+
+================================================================================
+   STEP 3: RUNNING THE PROJECT (PHASE BY PHASE)
+================================================================================
+
+--- PHASE 1: Data Processing & Analysis ---
+Goal: Clean the data and prove statistical correlation.
+Command:
+   pipenv run python src/phase1_pipeline.py
+
+Result:
+   - It will create 'data/processed/climate_socio_merged.csv'.
+   - It will save graphs in 'reports/figures/'.
+   - Look for the "Phase 1 Complete" message in the terminal.
+
+--- PHASE 2: AI Training (The Heavy Lifting) ---
+Goal: Train the Neural Network (LSTM) to learn climate patterns.
+Command:
+   pipenv run python src/phase2_model.py
+
+Result:
+   - You will see a progress bar (Epoch 1/100... Epoch 100/100).
+   - It will save the trained brain to 'models/climate_lstm_v1.pth'.
+   - It will report the Accuracy Score (RMSE).
+
+--- PHASE 3: The Dashboard (The Presentation) ---
+Goal: Launch the interactive website to simulate the future.
+Command:
+   pipenv run streamlit run src/phase3_dashboard.py
+
+Result:
+   - Your web browser will automatically open (http://localhost:8501).
+   - You can now click buttons on the sidebar to change scenarios (Green vs Accelerated).
+   - The AI will predict 50 years into the future in real-time.
+
+To Stop:
+   - Go back to the terminal and press "Ctrl + C".
+
+================================================================================
+   TROUBLESHOOTING
+================================================================================
+1. "Command not found: pipenv"
+   -> Try closing the Terminal and opening it again.
+
+2. "ModuleNotFoundError"
+   -> Make sure you run `pipenv install` successfully first.
+   -> Make sure you always type `pipenv run` before the python command.
+
+3. "Address already in use" (Streamlit)
+   -> Someone else is using the port. Try:
+      pipenv run streamlit run src/phase3_dashboard.py --server.port 8502

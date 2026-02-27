@@ -1,0 +1,28 @@
+File: src/phase3_dashboard.py
+Role: The Software Engineer / Deployment
+
+WHAT THIS CODE DOES:
+It turns a static math model into a dynamic product for humans.
+
+1. THE AUTOREGRESSIVE LOOP (The "Crystal Ball")
+   - How do we predict 50 years (600 months) into the future if we don't have data?
+   - We use the "Loop Method":
+     1. AI looks at 2024 -> Predicts Jan 2025.
+     2. We take that Prediction (Jan 2025) and feed it back into the AI as "History."
+     3. AI looks at Jan 2025 -> Predicts Feb 2025.
+     4. Repeat 600 times.
+   - This allows the AI to "walk" into the future one step at a time.
+
+2. SCENARIO INJECTION
+   - The AI needs 4 inputs: [Temp, CO2, GDP, Urbanization].
+   - The AI predicts Temp. But who predicts CO2 and GDP?
+   - WE DO. That is the "Scenario."
+   - If the user selects "Green Revolution," we force the CO2 numbers to go down in the loop.
+   - If the user selects "Status Quo," we force them up.
+   - This shows how sensitive the Climate (The AI) is to Human Policy (The Scenario).
+
+3. STREAMLIT (The Interface)
+   - Python is usually just text on a black screen.
+   - Streamlit converts Python scripts into a Website.
+   - It allows non-coders (stakeholders, politicians) to play with the parameters
+     without touching the code. This is "Model Deployment."
