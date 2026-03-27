@@ -1,0 +1,40 @@
+Title: The Machine Learning Engineering Lifecycle
+Project: Climate-Socio Dynamics AI
+
+1. THE GOAL
+We are not just "predicting the weather" (like will it rain tomorrow?).
+We are modeling "Climate Dynamics." We want to know:
+"If humanity changes its behavior (GDP, CO2), how does the Earth react over 50 years?"
+
+2. THE ML WORKFLOW (The "Standard" Process)
+Every professional AI project follows this pipeline. We did the exact same thing:
+
+Step A: Data Ingestion & Cleaning (Phase 1)
+   - Real-world data is messy.
+   - Different timestamps (Yearly GDP vs Daily Weather).
+   - "Garbage In, Garbage Out": If we don't fix the data, the AI learns nothing.
+
+Step B: Feature Engineering & Selection (Phase 1)
+   - We have hundreds of variables. Which ones actually matter?
+   - We used statistical tests (Granger Causality) to scientifically prove that
+     CO2 changes *cause* Temperature changes before we allowed the AI to use that data.
+
+Step C: Model Architecture (Phase 2)
+   - We selected an LSTM (Long Short-Term Memory) Network.
+   - Why? Because climate has "Memory." The temperature today depends on
+     the accumulated heat from the last 10 years, not just yesterday.
+     Standard formulas cannot capture this "Memory"; LSTMs can.
+
+Step D: Training & Backtesting (Phase 2)
+   - Training: We show the AI the years 1974-2014. It guesses, we correct it, it learns.
+   - Backtesting: We hide the years 2014-2024. We ask the AI to predict them.
+     We compare its guess to reality. This proves the model works.
+
+Step E: Inference & Simulation (Phase 3)
+   - Now that we trust the model, we use it to predict the future (2025-2075).
+   - We build a "Scenario Engine" to ask "What if?" questions.
+
+KEY TERMINOLOGY FOR PRESENTATION:
+- "Multivariate": We use multiple variables (Temp, CO2, GDP) to predict one thing.
+- "Time-Series": Data that is sequential (Time matters).
+- "Supervised Learning": We trained the AI using historical data where we knew the correct answer.

@@ -1,0 +1,27 @@
+File: src/phase1_pipeline.py
+Role: The Data Scientist
+
+WHAT THIS CODE DOES:
+It acts as a bridge between raw chaos and clean signals.
+
+1. THE PROBLEM: FREQUENCY MISMATCH
+   - Weather data comes Daily or Monthly.
+   - GDP and Population data come Yearly.
+   - You cannot feed this into an AI. It needs a row for every single month.
+   - SOLUTION: "Resampling and Interpolation."
+     We took the yearly GDP dots and drew a smooth curve between them to create monthly estimates.
+
+2. THE "WHY": GRANGER CAUSALITY TEST
+   - This is the most professional part of Phase 1.
+   - A Correlation Matrix (Heatmap) only tells us things move together (Correlation).
+   - Example: Ice cream sales and Shark attacks both go up in summer.
+     Does eating ice cream cause shark attacks? No. They are just correlated.
+   - GRANGER CAUSALITY checks if "Past values of X help predict Y."
+   - We proved that Past CO2 statistically helps predict Future Temperature.
+     This validates our decision to use CO2 as an input feature.
+
+3. NORMALIZATION (Visualization)
+   - We plotted the data on a scale of 0 to 1.
+   - Why? Because GDP is 500 Trillion and Temp is 15 degrees.
+     If you plot them on the same chart, the Temp line would look flat.
+     Normalization lets us see the trends of both simultaneously.

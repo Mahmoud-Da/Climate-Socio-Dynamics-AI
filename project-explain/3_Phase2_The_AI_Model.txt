@@ -1,0 +1,31 @@
+File: src/phase2_model.py
+Role: The AI Engineer
+
+WHAT THIS CODE DOES:
+It builds the brain (The Neural Network) and teaches it patterns.
+
+1. THE ARCHITECTURE: LSTM (Long Short-Term Memory)
+   - Imagine reading a book. To understand the last sentence, you need to remember
+     the character's name from Chapter 1.
+   - A standard Neural Network looks at one word at a time and forgets instantly.
+   - An LSTM has a "Cell State" (a memory highway) that carries information
+     from the past (1970s) all the way to the present.
+   - This is CRITICAL for Climate because CO2 emitted 20 years ago still warms the earth today.
+
+2. THE "SLIDING WINDOW" (Sequence Length)
+   - We don't just give the AI one month. We give it a "Window" of the past 12 months.
+   - Input: [Jan, Feb, ..., Dec] -> Output: [Next Jan]
+   - The AI learns the shape of a year (Seasonality).
+
+3. SCALING (MinMaxScaler)
+   - Neural Networks are bad at math with big numbers.
+   - If Input A is 0.001 (CO2 growth) and Input B is 1000 (GDP), the AI will ignore Input A.
+   - We squash ALL data to be between 0 and 1.
+   - Important: We save this "Scaler" so we can un-squash the predictions later to get real degrees Celsius.
+
+4. THE BACKTEST (Validation)
+   - This is how we prove we aren't lying.
+   - We trained on data up to 2014.
+   - We asked the AI: "Pretend it is 2014. Predict up to 2024."
+   - We overlaid the Red Line (AI) on the Blue Line (Reality).
+   - Since they matched, the model is "Robust."
