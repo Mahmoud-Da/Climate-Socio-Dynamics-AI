@@ -12,6 +12,8 @@ scikit-learn = "*"
 statsmodels = "*"
 torch = "*"
 torchvision = "*"
+streamlit = "*"
+plotly = "*"
 
 [dev-packages]
 jupyter = "*"
